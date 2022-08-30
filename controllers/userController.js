@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
     
@@ -34,9 +35,13 @@ module.exports = {
             
             let userPassword = user.password
 
-            if(bcrypt.compareSync(password,userPassword)) res.send(user)
-            else res.status(400).send('Email ou senha incorreto!')
-        
+            if(!bcrypt.compareSync(password,userPassword)){
+                 res.status(400).send('Email ou senha incorreto!')
+            }else {
+                let token = jwt.sign({_id:user._id},process.env.TOKEN_SECRET)
+                res.header('authorization-token',token)
+                res.send(user)
+            }
 
 
     }

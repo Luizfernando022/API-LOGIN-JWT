@@ -38,7 +38,7 @@ module.exports = {
             if(!bcrypt.compareSync(password,userPassword)){
                  res.status(400).send('Email ou senha incorreto!')
             }else {
-                let token = jwt.sign({_id:user._id},process.env.TOKEN_SECRET)
+                let token = jwt.sign({_id:user._id,admin:user.admin},process.env.TOKEN_SECRET)
                 res.header('authorization-token',token)
                 res.send(user)
             }
